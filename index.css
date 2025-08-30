@@ -1,0 +1,303 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* Custom colors for End Times Tracker */
+  --prophecy-amber: hsl(45, 100%, 64%);
+  --conflict-red: hsl(0, 84%, 60%);
+  --disaster-orange: hsl(25, 95%, 53%);
+  --economic-blue: hsl(207, 90%, 54%);
+  --spiritual-purple: hsl(262, 83%, 58%);
+  --community-green: hsl(142, 71%, 45%);
+}
+
+/* Disaster map animations */
+@keyframes pulse-critical {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+}
+
+.disaster-marker-critical {
+  animation: pulse-critical 2s infinite;
+}
+
+/* Google Maps info window styling */
+.gm-style .gm-style-iw-c {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+.gm-style .gm-style-iw-d {
+  overflow: hidden !important;
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+  --radius: 0.5rem;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .prophecy-card {
+    @apply bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/10 dark:to-orange-900/10 border-amber-200 dark:border-amber-800;
+  }
+  
+  .conflict-marker {
+    @apply bg-red-600 animate-pulse;
+    box-shadow: 0 0 20px hsl(0, 84%, 60%, 0.6);
+  }
+  
+  .disaster-marker {
+    @apply bg-orange-500 animate-pulse;
+    box-shadow: 0 0 15px hsl(25, 95%, 53%, 0.5);
+  }
+  
+  .economic-marker {
+    @apply bg-blue-500 animate-pulse;
+    box-shadow: 0 0 15px hsl(207, 90%, 54%, 0.5);
+  }
+  
+  .news-priority-high {
+    @apply border-l-4 border-red-500 bg-red-50 dark:bg-red-900/10;
+  }
+  
+  .news-priority-medium {
+    @apply border-l-4 border-amber-500 bg-amber-50 dark:bg-amber-900/10;
+  }
+  
+  .news-priority-low {
+    @apply border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/10;
+  }
+  
+  .stat-card {
+    @apply bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow;
+  }
+  
+  .prophecy-match {
+    @apply border border-slate-200 dark:border-slate-700 rounded-lg p-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer;
+  }
+  
+  .live-indicator {
+    @apply inline-flex items-center space-x-1 text-xs;
+  }
+  
+  .live-dot {
+    @apply w-2 h-2 bg-green-500 rounded-full animate-pulse;
+  }
+
+  /* Fixed overlay text visibility across the app */
+  .overlay-text {
+    @apply text-white font-semibold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.8);
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+  }
+
+  /* Modal and dialog text improvements */
+  .modal-text {
+    @apply text-slate-900 dark:text-slate-100;
+    line-height: 1.6;
+  }
+
+  /* Tooltip text fixes */
+  .tooltip-text {
+    @apply bg-slate-900 dark:bg-slate-700 text-white dark:text-slate-100 px-3 py-2 rounded-lg shadow-lg;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 1000;
+  }
+
+  /* Info window text fixes for maps */
+  .info-window-text {
+    color: #1a1a1a !important;
+    font-weight: 500 !important;
+    text-shadow: none !important;
+  }
+
+  /* Toast notification text */
+  .toast-text {
+    @apply text-slate-900 dark:text-slate-100;
+    font-weight: 500;
+  }
+
+  /* Crisis alert text */
+  .crisis-alert-text {
+    @apply text-white font-bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
+    background: rgba(220, 38, 38, 0.95);
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(6px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Prayer request text */
+  .prayer-text {
+    @apply text-slate-700 dark:text-slate-300;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  /* Prophecy match text */
+  .prophecy-text {
+    @apply text-slate-800 dark:text-slate-200;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+
+  /* Live stream text overlay fixes */
+  .stream-overlay-text {
+    @apply text-white font-bold;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9);
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.6));
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Earthquake monitor text improvements */
+  .seismic-text {
+    @apply text-white font-semibold;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);
+    background: rgba(220, 38, 38, 0.9);
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  /* High contrast text for accessibility */
+  .high-contrast-text {
+    @apply text-black dark:text-white;
+    font-weight: 600;
+  }
+  
+  .high-contrast-text.light {
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+  }
+  
+  .high-contrast-text.dark {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  
+  .premium-gradient {
+    @apply bg-gradient-to-r from-amber-400 to-orange-500;
+  }
+  
+  .tradition-selector {
+    @apply w-full px-3 py-2 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-primary;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-100 dark:bg-slate-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 dark:bg-slate-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400 dark:bg-slate-500;
+}

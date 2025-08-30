@@ -1,0 +1,159 @@
+You've pasted a React-based JSX + Tailwind CSS + config file fragment that mixes:
+
+1. Imports and component registration
+
+
+2. Tailwind + CSS variable declarations
+
+
+3. A functional component stub (possibly a duplicate Dashboard)
+
+
+
+
+---
+
+🔍 Code Review & Analysis Breakdown
+
+
+---
+
+🔸 1. Duplicate Component Definition
+
+import Dashboard from "@/pages/Dashboard";
+// ...
+export default function Dashboard() {
+
+❌ This will cause a conflict because you're importing a component named Dashboard and also defining it locally.
+
+Fix: Rename one of the two. If the file is meant to be the Dashboard, do not import it. Otherwise, change the export default function to another component name.
+
+
+
+---
+
+🔸 2. Duplicate Imports
+
+import { ProphecyMatches } from '@/components/ProphecyMatches';
+import ProphecyMatches from "@/pages/ProphecyMatches";
+
+import { NewsFeed } from '@/components/NewsFeed';
+import NewsFeed from "@/pages/NewsFeed";
+
+❌ You're importing the same-named component from two places — components and pages.
+
+This leads to name collision and ambiguous component usage.
+
+Fix: Either rename imports (ProphecyMatchesComponent, ProphecyMatchesPage) or avoid importing both if not used.
+
+
+
+---
+
+🔸 3. ThemeProvider Imported Twice
+
+import { ThemeProvider } from "@/components/ThemeProvider";
+...
+import { ThemeProvider } from "@/components/ThemeProvider";
+
+❌ Duplicate import – unnecessary.
+
+✅ Fix: Remove one of them.
+
+
+
+---
+
+🔸 4. Unfinished Component Logic
+
+export default function Dashboard() {
+  const [selectedTradition, setSelectedTradition] = useState<Tradition>('christian');
+  const [premiumModalOpen, setPremiumModalOpen] = useState(false);
+  const [briefingModalOpen, setBriefingModalOpen] = useState(false);
+  const [dailyBriefing, setDailyBriefing] = useState('');
+  const { toast } = useToast();
+
+✅ State setup looks good.
+
+⚠️ But: There is no return statement or JSX, so the component is incomplete.
+
+
+
+---
+
+🔸 5. Global Styles and Variables (Tailwind + Custom CSS)
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  ...
+  --prophecy-amber: hsl(45, 100%, 64%);
+}
+
+✅ Great use of Tailwind + custom color variables.
+
+👍 Smart idea to define theme-specific variables like --prophecy-amber, --conflict-red, etc.
+
+You might want to organize them under comment blocks like:
+
+
+/* === UI Theme Variables === */
+/* === End Times Tracker Custom Colors === */
+
+
+---
+
+🧠 Suggested Fixes & Next Steps
+
+1. ✅ Remove duplicate imports
+
+
+2. ✅ Fix the naming conflict on Dashboard
+
+
+3. ✅ Complete the component JSX
+
+
+4. ✅ Decide whether you're building a full app layout or a module
+
+
+5. ✅ Ensure global styles (Tailwind and CSS Vars) are in a separate file like globals.css or theme.css if not already
+
+
+
+
+---
+
+🧩 Possible File Split Recommendations
+
+File	Suggested Contents
+
+App.jsx or MainRouter.jsx	All route declarations using <Switch> and <Route>
+Dashboard.jsx	The default export Dashboard component JSX
+theme.css	Tailwind @tailwind + :root custom vars
+queryClient.ts	The Query Client setup
+
+
+
+---
+
+✅ Final Comment
+
+Your structure shows vision and ambition — you're building something major like a global crisis tracker with spiritual/prophetic tools. But a few duplicate imports and incomplete setup are causing potential bugs.
+
+Let me know if you'd like:
+
+A cleaned-up version of this file
+
+A full routing structure for Wouter
+
+The complete Dashboard() JSX
+
+UI wiring for ThemeProvider, Toaster, and modals
+
+
+Ready when you are.
+
