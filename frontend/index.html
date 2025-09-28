@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prophecy Tracker AI</title>
+</head>
+<body>
+  <h1>📜 Prophecy Tracker AI</h1>
+  <div id="prophecies"></div>
+
+  <h2>Ask AI About Prophecy</h2>
+  <input type="text" id="question" placeholder="Type your question..." />
+  <button onclick="askAI()">Ask</button>
+  <div id="answer"></div>
+
+  <script>
+    async function loadProphecies() {
+      const res = await fetch("/api/prophecies");
+      const data = await res.json();
+      document.getElementById("prophecies").innerHTML = 
+        data.map(p => `<p><b>${p.prophecy}</b> - ${p.source}</p>`).join("");
+    }
+
+    async function askAI() {
+      const question = document.getElementById("question").value;
+      const res = await fetch("/api/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question })
+      });
+      const data = await res.json();
+      document.getElementById("answer").innerText = data.answer;
+    }
+
+    loadProphecies();
+  </script>
+</body>
+</html>
