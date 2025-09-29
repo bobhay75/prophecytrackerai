@@ -29,3 +29,8 @@ Everything up-to-date
 error: cannot pull with rebase: Your index contains uncommitted changes.
 error: please commit or stash them.
 ⚠️ Pull failed
+To https://github.com/bobhay75/prophecytrackerai.git
+ ! [remote rejected] main -> main (cannot lock ref 'refs/heads/main': is at 2297ac15a365b058dacef09b49cc2ed62b95f3c1 but expected 83468bd3fafb93b0a3c6b5b34a5d15e7df48e2e3)
+error: failed to push some refs to 'https://github.com/bobhay75/prophecytrackerai.git'
+⚠️ Push failed
+✅ All changes committed and pushed at 2025-09-29 09:18:42
