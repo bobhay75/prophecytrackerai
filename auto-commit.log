@@ -1,8 +1,1 @@
 nohup: ignoring input
-[main 82a7a5d] Auto-commit: 2025-09-29 00:04:32
- 2 files changed, 6 insertions(+), 8 deletions(-)
-error: cannot pull with rebase: You have unstaged changes.
-error: please commit or stash them.
-To https://github.com/bobhay75/prophecytrackerai.git
-   9729fc7..82a7a5d  main -> main
-✅ All changes committed and pushed successfully at 2025-09-29 00:04:33.
