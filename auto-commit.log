@@ -34,3 +34,10 @@ To https://github.com/bobhay75/prophecytrackerai.git
 error: failed to push some refs to 'https://github.com/bobhay75/prophecytrackerai.git'
 ⚠️ Push failed
 ✅ All changes committed and pushed at 2025-09-29 09:18:42
+fatal: Unable to create '/home/thebobsomest1/trust-ai/projects/prophecytrackerai/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
