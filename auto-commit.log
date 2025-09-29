@@ -343,3 +343,8 @@ No changes to commit
 error: cannot pull with rebase: You have unstaged changes.
 error: please commit or stash them.
 ⚠️ Pull failed
+To https://github.com/bobhay75/prophecytrackerai.git
+ ! [remote rejected] main -> main (cannot lock ref 'refs/heads/main': is at 2232273ec35b7632e7dbc0eb6919363b16a9185f but expected 7cf10961607620e40a26b6c6985f5587ee47e8d2)
+error: failed to push some refs to 'https://github.com/bobhay75/prophecytrackerai.git'
+⚠️ Push failed
+✅ All changes committed and pushed at 2025-09-29 10:59:29
