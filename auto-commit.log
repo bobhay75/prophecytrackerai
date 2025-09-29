@@ -174,3 +174,8 @@ To https://github.com/bobhay75/prophecytrackerai.git
 error: failed to push some refs to 'https://github.com/bobhay75/prophecytrackerai.git'
 ⚠️ Push failed
 ✅ All changes committed and pushed at 2025-09-29 09:59:06
+[main 31f6f00] Auto-commit: 2025-09-29 10:04:06
+ 1 file changed, 4 insertions(+)
+error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+⚠️ Pull failed
