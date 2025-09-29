@@ -1741,3 +1741,22 @@ are terminated then try again. If it still fails, a git process
 may have crashed in this repository earlier:
 remove the file manually to continue.
 fatal: cannot lock ref 'HEAD': is at 50e9b4634e6d7a6b1b5149d09dcde59b0933fb25 but expected 23afdc8e5c14cf4d4f2a9a6883a02bc57dc52e1c
+fatal: Unable to create '/home/thebobsomest1/trust-ai/projects/prophecytrackerai/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
+On branch main
+Your branch is ahead of 'origin/main' by 4 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   auto-commit-email.log
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[main 3ef2c90] Auto-commit: 2025-09-29 10:34:18
+ 1 file changed, 2 insertions(+)
