@@ -909,3 +909,45 @@ error: failed to push some refs to 'https://github.com/bobhay75/prophecytrackera
 ✅ All changes committed and pushed successfully at 2025-09-29 09:28:44.
 Mon Sep 29 09:28:46 AM CDT 2025: Auto-commit successful.
 Mon Sep 29 09:28:46 AM CDT 2025: Auto-commit successful on try 1.
+fatal: Unable to create '/home/thebobsomest1/trust-ai/projects/prophecytrackerai/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
+fatal: Unable to create '/home/thebobsomest1/trust-ai/projects/prophecytrackerai/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
+fatal: Unable to create '/home/thebobsomest1/trust-ai/projects/prophecytrackerai/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
+fatal: Unable to create '/home/thebobsomest1/trust-ai/projects/prophecytrackerai/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
+On branch main
+Your branch is ahead of 'origin/main' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   auto-commit-email.log
+	modified:   auto-commit-safe.log
+	modified:   auto-commit.log
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[main afb4fc2] Auto-commit: 2025-09-29 09:33:46
+ 3 files changed, 123 insertions(+)
