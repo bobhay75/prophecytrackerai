@@ -14,3 +14,6 @@ error: cannot pull with rebase: You have unstaged changes.
 error: additionally, your index contains uncommitted changes.
 error: please commit or stash them.
 ⚠️ Pull failed
+fatal: unable to access 'https://github.com/bobhay75/prophecytrackerai.git/': Could not resolve host: github.com
+⚠️ Push failed
+✅ All changes committed and pushed at 2025-09-29 09:08:37
