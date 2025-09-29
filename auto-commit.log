@@ -8,3 +8,9 @@ error: please commit or stash them.
 To https://github.com/bobhay75/prophecytrackerai.git
    955b64d..c472c45  main -> main
 ✅ All changes committed and pushed at 2025-09-29 00:12:39
+Aborting commit due to empty commit message.
+No changes to commit
+error: cannot pull with rebase: You have unstaged changes.
+error: additionally, your index contains uncommitted changes.
+error: please commit or stash them.
+⚠️ Pull failed
