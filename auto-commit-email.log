@@ -1719,3 +1719,25 @@ error: failed to push some refs to 'https://github.com/bobhay75/prophecytrackera
 Mon Sep 29 10:29:18 AM CDT 2025: Auto-commit successful.
 ✅ All changes committed and pushed successfully at 2025-09-29 10:29:15.
 Mon Sep 29 10:29:18 AM CDT 2025: Auto-commit successful on try 1.
+fatal: Unable to create '/home/thebobsomest1/trust-ai/projects/prophecytrackerai/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
+fatal: Unable to create '/home/thebobsomest1/trust-ai/projects/prophecytrackerai/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
+fatal: Unable to create '/home/thebobsomest1/trust-ai/projects/prophecytrackerai/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
+fatal: cannot lock ref 'HEAD': is at 50e9b4634e6d7a6b1b5149d09dcde59b0933fb25 but expected 23afdc8e5c14cf4d4f2a9a6883a02bc57dc52e1c
