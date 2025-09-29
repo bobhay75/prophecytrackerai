@@ -2128,3 +2128,48 @@ an editor opened by 'git commit'. Please make sure all processes
 are terminated then try again. If it still fails, a git process
 may have crashed in this repository earlier:
 remove the file manually to continue.
+fatal: Unable to create '/home/thebobsomest1/trust-ai/projects/prophecytrackerai/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
+[main 523920b] Auto-commit: 2025-09-29 11:09:31
+ 1 file changed, 23 insertions(+)
+On branch main
+Your branch is ahead of 'origin/main' by 4 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   auto-commit-email.log
+	modified:   auto-commit-safe.log
+
+no changes added to commit (use "git add" and/or "git commit -a")
+To https://github.com/bobhay75/prophecytrackerai.git
+   b7554c7..31b38bd  main -> main
+✅ All changes committed and pushed successfully at 2025-09-29 11:09:30.
+To https://github.com/bobhay75/prophecytrackerai.git
+ ! [remote rejected] main -> main (cannot lock ref 'refs/heads/main': is at 523920b934b82546761d575d3fab8a6b365fc472 but expected b7554c75a7a738c8af28b8cc295bb0c8ade2c12b)
+error: failed to push some refs to 'https://github.com/bobhay75/prophecytrackerai.git'
+Mon Sep 29 11:09:33 AM CDT 2025: Auto-commit successful.
+✅ All changes committed and pushed successfully at 2025-09-29 11:09:31.
+Mon Sep 29 11:09:33 AM CDT 2025: Auto-commit successful.
+To https://github.com/bobhay75/prophecytrackerai.git
+ ! [remote rejected] main -> main (cannot lock ref 'refs/heads/main': is at 523920b934b82546761d575d3fab8a6b365fc472 but expected b7554c75a7a738c8af28b8cc295bb0c8ade2c12b)
+error: failed to push some refs to 'https://github.com/bobhay75/prophecytrackerai.git'
+✅ All changes committed and pushed successfully at 2025-09-29 11:09:31.
+Mon Sep 29 11:09:33 AM CDT 2025: Auto-commit successful.
+Everything up-to-date
+✅ All changes committed and pushed successfully at 2025-09-29 11:09:31.
+Mon Sep 29 11:09:34 AM CDT 2025: Auto-commit successful on try 1.
+To https://github.com/bobhay75/prophecytrackerai.git
+ ! [remote rejected] main -> main (cannot lock ref 'refs/heads/main': is at 523920b934b82546761d575d3fab8a6b365fc472 but expected b7554c75a7a738c8af28b8cc295bb0c8ade2c12b)
+error: failed to push some refs to 'https://github.com/bobhay75/prophecytrackerai.git'
+✅ All changes committed and pushed successfully at 2025-09-29 11:09:31.
+Mon Sep 29 11:09:34 AM CDT 2025: Auto-commit successful on try 1.
+Mon Sep 29 11:14:33 AM CDT 2025: Max runtime reached (12 hours). Stopping auto-commit loop.
+Mon Sep 29 11:14:33 AM CDT 2025: Max runtime reached (12 hours). Stopping auto-commit loop.
+Mon Sep 29 11:14:33 AM CDT 2025: Max runtime reached (12 hours). Stopping auto-commit loop.

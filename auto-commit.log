@@ -367,3 +367,15 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 error: cannot pull with rebase: You have unstaged changes.
 error: please commit or stash them.
 ⚠️ Pull failed
+To https://github.com/bobhay75/prophecytrackerai.git
+ ! [remote rejected] main -> main (cannot lock ref 'refs/heads/main': is at 523920b934b82546761d575d3fab8a6b365fc472 but expected b7554c75a7a738c8af28b8cc295bb0c8ade2c12b)
+error: failed to push some refs to 'https://github.com/bobhay75/prophecytrackerai.git'
+⚠️ Push failed
+✅ All changes committed and pushed at 2025-09-29 11:09:34
+fatal: Unable to create '/home/thebobsomest1/trust-ai/projects/prophecytrackerai/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
