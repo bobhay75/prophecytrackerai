@@ -1919,3 +1919,14 @@ an editor opened by 'git commit'. Please make sure all processes
 are terminated then try again. If it still fails, a git process
 may have crashed in this repository earlier:
 remove the file manually to continue.
+fatal: Unable to create '/home/thebobsomest1/trust-ai/projects/prophecytrackerai/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
+[main 8eb26a1] Auto-commit: 2025-09-29 10:49:24
+ 1 file changed, 16 insertions(+)
+fatal: cannot lock ref 'HEAD': is at 8018d7b9c2e422b46fe6046037d654810007804a but expected 8eb26a146733097a0f2746d62ec212e83f1e4f34
+fatal: cannot lock ref 'HEAD': is at 8018d7b9c2e422b46fe6046037d654810007804a but expected 8eb26a146733097a0f2746d62ec212e83f1e4f34
