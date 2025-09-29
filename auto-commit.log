@@ -329,3 +329,17 @@ To https://github.com/bobhay75/prophecytrackerai.git
 error: failed to push some refs to 'https://github.com/bobhay75/prophecytrackerai.git'
 ⚠️ Push failed
 ✅ All changes committed and pushed at 2025-09-29 10:54:28
+On branch main
+Your branch is ahead of 'origin/main' by 5 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   auto-commit-email.log
+
+no changes added to commit (use "git add" and/or "git commit -a")
+No changes to commit
+error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+⚠️ Pull failed
