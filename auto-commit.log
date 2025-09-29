@@ -301,3 +301,8 @@ hint: 'git pull ...') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 ⚠️ Push failed
 ✅ All changes committed and pushed at 2025-09-29 10:39:22
+[main 08cfbd7] Auto-commit: 2025-09-29 10:44:22
+ 1 file changed, 11 insertions(+)
+error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+⚠️ Pull failed
