@@ -96,3 +96,10 @@ To https://github.com/bobhay75/prophecytrackerai.git
    0e01e65..a4d1149  main -> main
 ✅ All changes committed and pushed successfully at 2025-09-28 23:19:49.
 Sun Sep 28 11:19:50 PM CDT 2025: Auto-commit successful.
+fatal: Unable to create '/home/thebobsomest1/trust-ai/projects/prophecytrackerai/.git/index.lock': File exists.
+
+Another git process seems to be running in this repository, e.g.
+an editor opened by 'git commit'. Please make sure all processes
+are terminated then try again. If it still fails, a git process
+may have crashed in this repository earlier:
+remove the file manually to continue.
