@@ -593,3 +593,11 @@ error: please commit or stash them.
 To https://github.com/bobhay75/prophecytrackerai.git
    35dc969..4f69e7b  main -> main
 ✅ All changes committed and pushed at 2025-09-29 13:37:28
+[main 26c9ca2] Auto-commit: 2025-09-29 13:42:28
+ 1 file changed, 8 insertions(+)
+error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+⚠️ Pull failed
+To https://github.com/bobhay75/prophecytrackerai.git
+   4f69e7b..26c9ca2  main -> main
+✅ All changes committed and pushed at 2025-09-29 13:42:29
