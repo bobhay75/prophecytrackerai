@@ -865,3 +865,11 @@ error: please commit or stash them.
 fatal: unable to access 'https://github.com/bobhay75/prophecytrackerai.git/': Could not resolve host: github.com
 ⚠️ Push failed
 ✅ All changes committed and pushed at 2025-09-29 16:31:30
+[main 2c71818] Auto-commit: 2025-09-29 16:36:30
+ 1 file changed, 8 insertions(+)
+error: cannot pull with rebase: You have unstaged changes.
+error: please commit or stash them.
+⚠️ Pull failed
+fatal: unable to access 'https://github.com/bobhay75/prophecytrackerai.git/': Could not resolve host: github.com
+⚠️ Push failed
+✅ All changes committed and pushed at 2025-09-29 16:36:40
