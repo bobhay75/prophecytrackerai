@@ -288,3 +288,16 @@ Changes not staged for commit:
 
 no changes added to commit (use "git add" and/or "git commit -a")
 No changes to commit
+error: cannot pull with rebase: You have unstaged changes.
+error: additionally, your index contains uncommitted changes.
+error: please commit or stash them.
+⚠️ Pull failed
+To https://github.com/bobhay75/prophecytrackerai.git
+ ! [rejected]        main -> main (non-fast-forward)
+error: failed to push some refs to 'https://github.com/bobhay75/prophecytrackerai.git'
+hint: Updates were rejected because the tip of your current branch is behind
+hint: its remote counterpart. Integrate the remote changes (e.g.
+hint: 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+⚠️ Push failed
+✅ All changes committed and pushed at 2025-09-29 10:39:22
