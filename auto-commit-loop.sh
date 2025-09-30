@@ -5,22 +5,34 @@ REPO_PATH="/home/thebobsomest1/trust-ai/projects/prophecytrackerai"
 cd "$REPO_PATH" || exit
 
 while true; do
-    # Stage all changes
+    echo "🔄 Starting auto-commit cycle at $(date)"
+
+    # Stage everything
     git add .
 
-    # Commit changes if there are any
+    # Commit if changes exist
     git commit -m "Auto-commit: $(date '+%Y-%m-%d %H:%M:%S')" 2>/dev/null || echo "No changes to commit"
 
-    # Pull remote changes first to avoid push conflicts
-    git pull --rebase origin main 2>/dev/null || echo "Pull failed, continuing..."
+    # Stash any uncommitted changes before pulling
+    git stash push -u -m "autocommit-stash" 2>/dev/null || true
 
-    # Push changes to GitHub
-    git push origin main 2>/dev/null || echo "Push failed, retrying in next loop"
+    # Pull with rebase to keep history clean
+    if git pull --rebase origin main; then
+        echo "✅ Pull successful"
+    else
+        echo "⚠️ Pull failed, continuing anyway..."
+    fi
 
-    # Log timestamp
-    echo "✅ All changes committed and pushed successfully at $(date '+%Y-%m-%d %H:%M:%S')."
+    # Apply stashed changes back (if any)
+    git stash pop 2>/dev/null || true
 
-    # Wait 5 minutes before next loop
+    # Try pushing
+    if git push origin main; then
+        echo "✅ Push successful at $(date)"
+    else
+        echo "⚠️ Push failed at $(date). Will retry next cycle."
+    fi
+
+    # Sleep 5 minutes
     sleep 300
 done
-
