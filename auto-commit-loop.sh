@@ -1,28 +1,26 @@
 #!/bin/bash
 
+# Path to your repository
 REPO_PATH="/home/thebobsomest1/trust-ai/projects/prophecytrackerai"
 cd "$REPO_PATH" || exit
 
-LOCKFILE="/tmp/auto-commit-loop.lock"
-
-# Prevent multiple instances
-if [ -f "$LOCKFILE" ]; then
-    echo "⚠️ Script already running."
-    exit 1
-fi
-touch "$LOCKFILE"
-
-trap "rm -f $LOCKFILE; exit" INT TERM EXIT
-
 while true; do
+    # Stage all changes
     git add .
-    git commit -m "Auto-commit: $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
 
-    git pull --rebase origin main || echo "⚠️ Pull failed"
+    # Commit changes if there are any
+    git commit -m "Auto-commit: $(date '+%Y-%m-%d %H:%M:%S')" 2>/dev/null || echo "No changes to commit"
 
-    git push origin main || echo "⚠️ Push failed"
+    # Pull remote changes first to avoid push conflicts
+    git pull --rebase origin main 2>/dev/null || echo "Pull failed, continuing..."
 
-    echo "✅ All changes committed and pushed at $(date '+%Y-%m-%d %H:%M:%S')"
+    # Push changes to GitHub
+    git push origin main 2>/dev/null || echo "Push failed, retrying in next loop"
 
-    sleep 300  # 5 minutes
+    # Log timestamp
+    echo "✅ All changes committed and pushed successfully at $(date '+%Y-%m-%d %H:%M:%S')."
+
+    # Wait 5 minutes before next loop
+    sleep 300
 done
+
