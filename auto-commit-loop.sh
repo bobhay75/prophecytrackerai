@@ -1,27 +1,26 @@
 #!/bin/bash
 
-cd /home/thebobsomest1/trust-ai/projects/prophecytrackerai
-
-# Generate unique ID for this loop
-LOOP_ID=$(date +%s%N | tail -c 5)
-
-echo "🚀 Auto-commit loop [$LOOP_ID] started at $(date)" >> /home/thebobsomest1/trust-ai/projects/prophecytrackerai/auto-commit.log
+REPO_PATH="/home/thebobsomest1/trust-ai/projects/prophecytrackerai"
+cd "$REPO_PATH" || exit
 
 while true; do
-  git add .
+    # Stage all changes
+    git add .
 
-  COMMIT_MSG="Auto-commit [$LOOP_ID]: $(date '+%Y-%m-%d %H:%M:%S')"
-  git commit -m "$COMMIT_MSG"
+    # Commit changes (skip if no changes)
+    git commit -m "Auto-commit: $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
 
-  # Try pushing
-  if git push origin main; then
-    echo "✅ Loop [$LOOP_ID] pushed successfully at $(date)" >> /home/thebobsomest1/trust-ai/projects/prophecytrackerai/auto-commit.log
-  else
-    echo "⚠️ Loop [$LOOP_ID] push failed at $(date). Attempting to fix..." >> /home/thebobsomest1/trust-ai/projects/prophecytrackerai/auto-commit.log
-    git fetch origin main
-    git reset --soft origin/main
-    sleep 30
-  fi
+    # Ensure we are up to date before pushing
+    git stash push -m "auto-stash" --include-untracked || true
+    git pull --rebase origin main || true
+    git stash pop || true
 
-  sleep 300
+    # Push changes
+    git push origin main
+
+    echo "✅ All changes committed and pushed successfully at $(date '+%Y-%m-%d %H:%M:%S')."
+
+    # Wait 5 minutes
+    sleep 300
 done
+
