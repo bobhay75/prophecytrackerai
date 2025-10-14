@@ -1,0 +1,11 @@
+import React from "react";
+import ProphecyTracker from "./components/ProphecyTracker";
+
+export default function Dashboard() {
+  return (
+    <div className="p-6 space-y-6">
+      <h1 className="text-2xl font-bold">⚡ End Times Tracker Dashboard</h1>
+      <ProphecyTracker />
+    </div>
+  );
+}
