@@ -3,3 +3,12 @@ dist/
 .env
 *.log
 *.pyc
+
+# Legacy operator credentials must never be committed or shipped.
+admin_access_info.txt
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+service-account*.json
