@@ -6,7 +6,8 @@ const root = fileURLToPath(new URL('../out/', import.meta.url));
 const html = fs.readFileSync(path.join(root,'index.html'),'utf8');
 assert.ok(html.includes('Start with what the record supports.'));
 assert.ok(html.includes('Earthquake observations'));
-assert.ok(html.includes('No AI prediction is generated.'));
+assert.ok(html.includes('Your research workspace'));
+assert.ok(html.includes('No future earthquake time, place or magnitude is predicted.'));
 let count=0;
 function visit(directory) {
  for (const name of fs.readdirSync(directory)) {

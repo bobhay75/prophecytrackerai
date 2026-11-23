@@ -1,4 +1,4 @@
-name: Validate source observation dashboard
+name: Validate observation workspace and cPanel release
 on:
   pull_request:
   push:
@@ -8,6 +8,7 @@ permissions:
 jobs:
   frontend:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     defaults:
       run:
         working-directory: frontend
@@ -16,13 +17,34 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Install native PHP runtime
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y php-cli php-sqlite3 php-curl php-mbstring
       - run: npm ci --no-audit --no-fund
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
       - run: npm audit --audit-level=high
       - run: npm run build
+        env:
+          NEXT_PUBLIC_BASE_PATH: /prophecy
       - run: node scripts/check-export.mjs
+      - name: Native account, payment, source and AI contracts
+        working-directory: .
+        run: |
+          php backend/test/contracts.php
+          php backend/test/concurrency.php
+      - name: Native HTTP security and complete private workflows
+        working-directory: .
+        run: python3 backend/test/test_http.py
+      - name: Install isolated browser engines
+        run: npx playwright install --with-deps chromium webkit
+      - name: Desktop, Android and iPhone journeys plus accessibility
+        run: npm run test:browser
+      - name: Package separate public and private cPanel files
+        working-directory: .
+        run: python3 scripts/package-cpanel.py
       - uses: actions/upload-artifact@v4
         with:
           name: prophecytracker-static-dashboard
@@ -30,3 +52,16 @@ jobs:
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: prophecytracker-cpanel-release
+          path: prophecytracker-cpanel-release.zip
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: prophecytracker-browser-evidence
+          path: frontend/test-results/
+          if-no-files-found: ignore
+          retention-days: 14

@@ -4,3 +4,9 @@
 body {
   @apply bg-gray-100 text-gray-900;
 }
+html { scroll-behavior: smooth; }
+button, input, select, summary, a { touch-action: manipulation; }
+:focus-visible { outline: 3px solid #b45309; outline-offset: 4px; }
+.skip-link { position: fixed; z-index: 100; left: 1rem; top: -8rem; padding: 1rem; background: white; color: #1e3a8a; font-weight: 700; }
+.skip-link:focus { top: 1rem; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
