@@ -26,7 +26,7 @@ jobs:
           for path in paths:
               if path.is_file():
                   original = path.read_text()
-                  updated = re.sub(r'http://((?:[A-Za-z0-9-]+\.)?(?:archive|security)\.ubuntu\.com/ubuntu)', r'https://\1', original)
+                  updated = re.sub(r'http://((?:[A-Za-z0-9-]+\.)*(?:archive|security)\.ubuntu\.com/ubuntu)', r'https://\1', original)
                   if updated != original:
                       path.write_text(updated)
                       print('Using HTTPS for official Ubuntu mirror in', path)
