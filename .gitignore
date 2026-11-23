@@ -12,3 +12,12 @@ admin_access_info.txt
 *.pem
 *.key
 service-account*.json
+config.local.php
+prophecy-release/
+backend/data/
+backend/src/data/
+backend/src/sessions/
+test-results/
+playwright-report/
+.test-runtime.json
+prophecytracker-cpanel-release.zip

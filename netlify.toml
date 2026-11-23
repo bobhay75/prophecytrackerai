@@ -1,0 +1,18 @@
+# The connected Netlify project serves the public static dashboard only.
+# PHP account/payment code is packaged separately for the authorized cPanel host.
+[build]
+  base = "frontend"
+  command = "npm run build && node scripts/check-export.mjs"
+  publish = "out"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NEXT_PUBLIC_BASE_PATH = ""
+  NETLIFY_NEXT_PLUGIN_SKIP = "true"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "no-referrer"
