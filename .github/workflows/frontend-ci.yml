@@ -18,7 +18,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Use HTTPS and bounded Ubuntu package downloads
+        run: |
+          sudo python3 - <<'PY'
+          import pathlib, re
+          paths = [pathlib.Path('/etc/apt/sources.list'), *pathlib.Path('/etc/apt/sources.list.d').glob('*.list'), *pathlib.Path('/etc/apt/sources.list.d').glob('*.sources')]
+          for path in paths:
+              if path.is_file():
+                  original = path.read_text()
+                  updated = re.sub(r'http://((?:[A-Za-z0-9-]+\.)?(?:archive|security)\.ubuntu\.com/ubuntu)', r'https://\1', original)
+                  if updated != original:
+                      path.write_text(updated)
+                      print('Using HTTPS for official Ubuntu mirror in', path)
+          pathlib.Path('/etc/apt/apt.conf.d/99bounded-ci').write_text('Acquire::http::Timeout "30";\nAcquire::https::Timeout "30";\nAcquire::Retries "2";\nAPT::Update::Error-Mode "any";\n')
+          PY
       - name: Install native PHP runtime
+        timeout-minutes: 4
         run: |
           sudo apt-get update
           sudo apt-get install -y php-cli php-sqlite3 php-curl php-mbstring
@@ -39,8 +54,12 @@ jobs:
       - name: Native HTTP security and complete private workflows
         working-directory: .
         run: python3 backend/test/test_http.py
-      - name: Install isolated browser engines
-        run: npx playwright install --with-deps chromium webkit
+      - name: Install browser system dependencies
+        timeout-minutes: 6
+        run: npx playwright install-deps chromium webkit
+      - name: Download isolated browser engines
+        timeout-minutes: 4
+        run: npx playwright install chromium webkit
       - name: Desktop, Android and iPhone journeys plus accessibility
         run: npm run test:browser
       - name: Package separate public and private cPanel files
