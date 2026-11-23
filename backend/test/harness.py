@@ -9,6 +9,7 @@ import sqlite3
 import subprocess
 import tempfile
 import time
+import urllib.error
 import urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
@@ -31,12 +32,13 @@ def seed(directory):
     return data
 
 @contextlib.contextmanager
-def server(port=0, web=None, base=""):
+def server(port=0, web=None, base="", development=True):
     with tempfile.TemporaryDirectory(prefix="prophecy-http-") as tmp:
         tmp = pathlib.Path(tmp)
         private = tmp / "prophecy-private"
         public = tmp / "public_html"
         shutil.copytree(ROOT / "backend/src", private)
+        private.chmod(0o700)
         public.mkdir()
         target = public / base.lstrip("/")
         if web:
@@ -49,8 +51,10 @@ def server(port=0, web=None, base=""):
                 sock.bind(("127.0.0.1", 0))
                 port = sock.getsockname()[1]
         origin = f"http://127.0.0.1:{port}"
-        settings = f"<?php return ['origin'=>'{origin}','base_path'=>'{base}','development'=>true];"
+        configured_origin = origin if development else origin.replace("http://", "https://", 1)
+        settings = f"<?php return ['origin'=>'{configured_origin}','base_path'=>'{base}','development'=>{'true' if development else 'false'}];"
         (private / "config.local.php").write_text(settings)
+        (private / "config.local.php").chmod(0o600)
         php = os.environ.get("PROPHECY_PHP", "php")
         subprocess.run([php, str(private / "console.php"), "check"], check=True, capture_output=True)
         seed(private)
@@ -65,6 +69,10 @@ def server(port=0, web=None, base=""):
                         with urllib.request.urlopen(origin + base + "/api/index.php?action=health", timeout=1) as response:
                             if response.status == 200:
                                 break
+                    except urllib.error.HTTPError as error:
+                        if not development and error.code == 426:
+                            break
+                        time.sleep(.05)
                     except OSError:
                         time.sleep(.05)
                 else:

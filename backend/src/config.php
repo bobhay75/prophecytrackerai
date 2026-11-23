@@ -4,7 +4,9 @@ namespace Prophecy;
 
 function loadConfig(string $directory): array
 {
+    if (!is_dir($directory) || is_link($directory) || (fileperms($directory)&0077)) throw new \RuntimeException('Private application directory must have 0700 permissions.');
     $file = $directory . '/config.local.php';
+    if (is_link($file) || (is_file($file) && (fileperms($file)&0077))) throw new \RuntimeException('Private configuration must have 0600 permissions.');
     $local = is_file($file) ? require $file : [];
     if (!is_array($local)) throw new \RuntimeException('Invalid private configuration.');
     $config = array_replace([

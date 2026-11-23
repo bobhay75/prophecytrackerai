@@ -2,7 +2,7 @@
 import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { api, ApiError } from '../lib/account-api';
 
-type User = { id: number; username: string };
+type User = { id: number; username: string; auth_version: number };
 type Pass = { active: boolean; expires_at: number | null; mode: string | null; verification_pending?: boolean };
 type Capabilities = { registration_open: boolean; ai_available: boolean; checkout_available: boolean; checkout_mode: string; pass_price_usd: string | null; free_rules: number; pass_rules: number; last_background_poll: number | null };
 type Session = { user: User | null; csrf: string; capabilities: Capabilities; pass: Pass | null };
@@ -30,13 +30,27 @@ export default function ResearchWorkspace() {
   const [rules, setRules] = useState<Rule[]>([]), [alerts, setAlerts] = useState<Alert[]>([]), [reports, setReports] = useState<SavedReport[]>([]), [orders, setOrders] = useState<Order[]>([]);
   const [ruleId, setRuleId] = useState(''), [label, setLabel] = useState(''), [minimum, setMinimum] = useState(4.5), [location, setLocation] = useState('');
   const [selected, setSelected] = useState<SavedReport | null>(null), [returnOrder, setReturnOrder] = useState('');
-  const csrf = useRef(''), previousAlert = useRef<number | null>(null), notifications = useRef(false), polling = useRef(false);
-  const userId = session?.user?.id;
-  const refreshSession = useCallback(async () => {
-    const next = await api<Session>('session'); csrf.current = next.csrf; setSession(next); setBackendError(''); return next;
+  const csrf = useRef(''), previousAlert = useRef<number | null>(null), notifications = useRef(false);
+  const accountIdentity = useRef<string | null>(null), accountGeneration = useRef(0), sessionRequest = useRef(0);
+  const userId = session?.user ? `${session.user.id}:${session.user.auth_version}` : null;
+  const clearPrivateState = useCallback(() => {
+    accountGeneration.current++; accountIdentity.current = null; notifications.current = false; previousAlert.current = null;
+    setRules([]); setAlerts([]); setReports([]); setOrders([]); setSelected(null); setRecovery(''); setAuthMode('login');
+    setRuleId(''); setLabel(''); setMinimum(4.5); setLocation('');
   }, []);
+  const refreshSession = useCallback(async () => {
+    const request = ++sessionRequest.current, generation = accountGeneration.current;
+    const next = await api<Session>('session');
+    if (request !== sessionRequest.current || generation !== accountGeneration.current) return next;
+    const identity = next.user ? `${next.user.id}:${next.user.auth_version}` : null;
+    if (identity !== accountIdentity.current) { clearPrivateState(); accountIdentity.current = identity; }
+    csrf.current = next.csrf; setSession(next); setBackendError(''); return next;
+  }, [clearPrivateState]);
   const refreshWorkspace = useCallback(async () => {
+    const generation = accountGeneration.current, identity = accountIdentity.current;
+    if (!identity) return;
     const results = await Promise.all([api<{ rules: Rule[] }>('rules'), api<{ alerts: Alert[] }>('alerts'), api<{ reports: SavedReport[] }>('reports'), api<{ orders: Order[] }>('orders')]);
+    if (generation !== accountGeneration.current || identity !== accountIdentity.current) return;
     setRules(results[0].rules); setAlerts(results[1].alerts); setReports(results[2].reports); setOrders(results[3].orders);
     if (previousAlert.current !== null && notifications.current && 'Notification' in window && Notification.permission === 'granted') {
       for (const item of results[1].alerts.filter(a => a.id > previousAlert.current!).slice(0, 3)) new Notification(`Observation matched: ${item.label}`, { body: `M${item.event.magnitude.toFixed(1)} · ${item.event.place}`, tag: `prophecy-${item.id}` });
@@ -54,12 +68,12 @@ export default function ResearchWorkspace() {
   }, [refreshSession]);
   useEffect(() => {
     if (!userId) { setRules([]); setAlerts([]); setReports([]); setOrders([]); setSelected(null); previousAlert.current = null; return; }
-    let alive = true;
+    let alive = true, polling = false;
     const tick = async (evaluate: boolean) => {
-      if (polling.current || !alive) return; polling.current = true;
+      if (polling || !alive) return; polling = true;
       try { if (evaluate) await api('evaluate', {}, csrf.current); if (alive) await refreshWorkspace(); }
       catch (e) { if (alive) setError(e instanceof Error ? e.message : 'Monitoring refresh failed.'); }
-      finally { polling.current = false; }
+      finally { polling = false; }
     };
     void tick(false); const timer = setInterval(() => { if (!document.hidden) void tick(true); }, 60000);
     return () => { alive = false; clearInterval(timer); };
@@ -74,7 +88,7 @@ export default function ResearchWorkspace() {
     event.preventDefault(); const form = event.currentTarget; const data = Object.fromEntries(new FormData(form));
     void act(async () => {
       const result = await api<{ recovery_code?: string; csrf: string }>(authMode, data, csrf.current);
-      csrf.current = result.csrf; setRecovery(result.recovery_code || ''); await refreshSession(); form.reset();
+      csrf.current = result.csrf; await refreshSession(); setRecovery(result.recovery_code || ''); form.reset();
       setMessage(authMode === 'recover' ? 'Password changed. Earlier sessions and the old recovery code are revoked.' : 'Your private workspace is ready.');
     });
   }
@@ -86,8 +100,8 @@ export default function ResearchWorkspace() {
   }
   async function payment(orderId: string, capture: boolean) {
     const result = await api<{ confirmed: boolean; provider_status?: string; closed?: boolean }>(capture ? 'capture-order' : 'reconcile-order', { order_id: orderId }, csrf.current);
-    await refreshSession(); await refreshWorkspace(); setReturnOrder('');
-    setMessage(result.confirmed ? 'PayPal verified the payment. Your Research Pass is active.' : result.closed ? 'PayPal did not report a completed payment, and this order is closed. You can start a new checkout.' : `PayPal status: ${result.provider_status}. Checking status did not capture or charge the order.`);
+    const fresh = await refreshSession(); await refreshWorkspace(); setReturnOrder('');
+    setMessage(result.confirmed ? fresh.pass?.active ? 'PayPal verified the payment. Your Research Pass is active.' : 'PayPal confirmed this existing payment, but it does not currently provide an active Research Pass. Checking an expired purchase does not renew or charge it.' : result.closed ? 'PayPal did not report a completed payment, and this order is closed. You can start a new checkout.' : `PayPal status: ${result.provider_status}. Checking status did not capture or charge the order.`);
   }
   async function exportAccount() {
     const first = (await api<{ export: AccountExport }>('export')).export;
@@ -121,7 +135,7 @@ export default function ResearchWorkspace() {
       <p className="mt-5 text-sm text-slate-700">Free accounts include three saved monitoring rules and private scenario reports. No payment details or email address are required.</p>
     </div>}
     {session?.user && <>
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl bg-slate-900 p-5 text-white"><div><strong>Signed in as {session.user.username}</strong><p className="mt-1 text-sm">{pass?.active ? `${pass.mode === 'sandbox' ? 'Sandbox test ' : ''}Research Pass · ends ${stamp(pass.expires_at!)}` : 'Free account · three saved rules'}</p></div><button className={secondary} disabled={busy} onClick={() => void act(async () => { await api('logout', {}, csrf.current); setRecovery(''); await refreshSession(); setMessage('Signed out. Your private records remain on the server.'); })}>Sign out</button></div>
+      <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl bg-slate-900 p-5 text-white"><div><strong>Signed in as {session.user.username}</strong><p className="mt-1 text-sm">{pass?.active ? `${pass.mode === 'sandbox' ? 'Sandbox test ' : ''}Research Pass · ends ${stamp(pass.expires_at!)}` : 'Free account · three saved rules'}</p></div><button className={secondary} disabled={busy} onClick={() => void act(async () => { clearPrivateState(); setSession(previous => previous ? { ...previous, user: null, pass: null } : null); await api('logout', {}, csrf.current); await refreshSession(); setMessage('Signed out. Your private records remain on the server.'); })}>Sign out</button></div>
       {recovery && <div role="status" className="rounded-xl border-2 border-amber-400 bg-amber-50 p-5 text-amber-950"><h3 className="text-lg font-bold">Save this recovery code now</h3><p className="mt-2">This code can reset your password. It is shown once. Keep it privately, away from your password.</p><code className="my-4 block break-all rounded-lg bg-white p-4 text-sm">{recovery}</code><div className="flex flex-wrap gap-3"><button className={secondary} onClick={() => download('prophecy-recovery.json', { username: session.user!.username, recovery_code: recovery })}>Download recovery code</button><button className={button} onClick={() => setRecovery('')}>I saved it privately</button></div></div>}
       <nav aria-label="Research workspace" className="flex flex-wrap gap-5 font-semibold text-blue-800 underline underline-offset-4"><a href="#monitoring-rules">Monitoring rules</a><a href="#observation-alerts">Alert inbox</a><a href="#source-analysis">Analysis</a><a href="#research-pass">Research Pass</a><a href="#account-settings">Account</a></nav>
       <div id="monitoring-rules" className={panel}><h3 className="text-2xl font-bold">Monitoring rules</h3><p className="mt-2 text-sm leading-relaxed text-slate-700">Match new USGS M2.5+ observations by magnitude and an optional phrase in the reported location. After a pass expires, the three newest enabled rules continue monitoring; older rules remain saved.</p>

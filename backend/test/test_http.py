@@ -1,6 +1,5 @@
 import http.cookiejar
 import json
-import pathlib
 import urllib.error
 import urllib.request
 from harness import seed, server
@@ -82,7 +81,9 @@ with server(base="/prophecy") as host:
     check(a.call("delete-account", {"password": "recovered correct horse pass"})[0] == 200, "authenticated account deletion")
     check(a.call("session")[1]["user"] is None, "deleted account no longer authenticated")
     check(b.call("session")[1]["user"]["username"] == "httpbob", "other account survives deletion")
-    config = pathlib.Path(host["private"]) / "config.local.php"
-    config.write_text("<?php return ['origin'=>'https://127.0.0.1:"+str(host["port"])+"','base_path'=>'/prophecy'];")
-    check(b.call("session", headers={"Origin": "https://127.0.0.1:"+str(host["port"]), "X-Forwarded-Proto": "https"})[0] == 426, "production refuses HTTP and untrusted forwarded headers")
+with server(base="/prophecy", development=False) as host:
+    # A new process avoids depending on the runner's PHP opcode-cache settings.
+    secure = Client(host["origin"])
+    status, result, _ = secure.call("session", headers={"Origin": "https://127.0.0.1:"+str(host["port"]), "X-Forwarded-Proto": "https"})
+    check(status == 426, f"production refuses HTTP and untrusted forwarded headers: {status}, {result}")
 print(f"PASS: {checks} native HTTP account, session, CSRF, ownership, recovery, alert, report and disabled-provider assertions.")

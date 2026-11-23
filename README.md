@@ -22,6 +22,7 @@ A one-time **30-day Research Pass** raises saved rules from three to 20 and the 
 - `backend/public/index.php` is the single public API entrypoint. All implementation, configuration, database and session files belong outside the web document root.
 - `backend/src/` requires PHP 8.1+, PDO SQLite, cURL and mbstring. It needs no Node server, Firebase, daemon or paid database on the host.
 - The cPanel release targets `/prophecy/`. Build with `NEXT_PUBLIC_BASE_PATH=/prophecy`. The package separates `public/` and `private/`; do not upload the whole ZIP or repository into `public_html`.
+- Existing Netlify and Vercel integrations publish only `frontend/out` at their root URLs. `netlify.toml` explicitly selects the current frontend instead of the historical root server. These static previews do not execute PHP; the workspace connection accurately remains unavailable there until a supported backend host is used.
 - Native source tests use synthetic provider responses and isolated temporary accounts. They do not establish real PayPal sandbox/live behavior, configured AI output, production cookie/TLS behavior, a running cron or physical-device acceptance.
 - A configuration/health response is not proof of a successful source, AI or payment request. The UI reports when the backend, AI or checkout is unavailable.
 
