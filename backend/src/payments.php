@@ -20,14 +20,19 @@ trait Payments
             return $operation();
         }finally{flock($lock,LOCK_UN);fclose($lock);}
     }
+    private function paypalConfigured(): bool
+    {
+        $c=$this->config;
+        return in_array($c['paypal_mode'],['sandbox','live'],true) && preg_match('/^[A-Z0-9]{6,32}$/D',$c['paypal_merchant_id'])===1 && $c['paypal_client_id']!=='' && $c['paypal_client_secret']!=='';
+    }
     public function paypalReady(): bool
     {
         $c=$this->config;
-        return $c['paypal_enabled']===true && in_array($c['paypal_mode'],['sandbox','live'],true) && preg_match('/^[A-Z0-9]{6,32}$/D',$c['paypal_merchant_id'])===1 && $c['paypal_client_id']!=='' && $c['paypal_client_secret']!=='' && is_string($c['pass_price_usd']) && preg_match('/^(?:[1-9][0-9]{0,3}|0)\.[0-9]{2}$/D',$c['pass_price_usd'])===1 && (float)$c['pass_price_usd']>0;
+        return $c['paypal_enabled']===true && $this->paypalConfigured() && is_string($c['pass_price_usd']) && preg_match('/^(?:[1-9][0-9]{0,3}|0)\.[0-9]{2}$/D',$c['pass_price_usd'])===1 && (float)$c['pass_price_usd']>0;
     }
     private function paypal(string $method,string $path,?array $payload=null,?string $requestId=null): array
     {
-        if(!$this->paypalReady()) throw new Failure(503,'checkout_disabled','PayPal checkout has not been activated. No payment was started.');
+        if(!$this->paypalConfigured()) throw new Failure(503,'checkout_disabled','The original PayPal provider configuration is required. No payment was started.');
         $base=$this->config['paypal_mode']==='live'?'https://api-m.paypal.com':'https://api-m.sandbox.paypal.com';
         if($this->paypalToken===null){
             $r=$this->request('POST',$base.'/v1/oauth2/token',['Authorization: Basic '.base64_encode($this->config['paypal_client_id'].':'.$this->config['paypal_client_secret']),'Content-Type: application/x-www-form-urlencoded'],'grant_type=client_credentials');
@@ -103,6 +108,7 @@ trait Payments
         // GET first recovers an interrupted successful capture without charging again.
         $remote=$this->paypal('GET','/v2/checkout/orders/'.$providerId);
         if(($remote['status']??'')!=='COMPLETED') {
+            if(!$this->paypalReady())throw new Failure(503,'checkout_disabled','New payment capture is disabled. You can still check an existing payment without charging it.');
             if(($remote['status']??'')!=='APPROVED')throw new Failure(409,'approval_required','Approve the order on PayPal before completing this purchase.');
             $this->paypal('POST','/v2/checkout/orders/'.$providerId.'/capture',[],'capture-'.$order['id']);
             $remote=$this->paypal('GET','/v2/checkout/orders/'.$providerId);

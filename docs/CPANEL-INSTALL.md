@@ -50,7 +50,7 @@ Account recovery uses a one-time random code shown at registration and each reco
 
 Rules, alert history, reports and payment identifiers are held in a private SQLite database. Alerts expire after 30 days; reports expire after 90 days and the latest 50 remain per account. The API shows the latest 100 alerts. Account deletion removes research records and detaches retained payment rows; it does not undo payments or request refunds. Back up the entire private directory securely. SQLite uses WAL: use SQLite's backup operation or stop writers and copy the database with its WAL state; do not copy only the `.sqlite` file during writes.
 
-For a code rollback, restore the previous public and private **code** versions together while preserving database, local config and session directories. This first schema only adds its own tables; do not drop tables or delete private data as part of rollback. A rollback cannot reverse a PayPal payment. If checkout is uncertain, disable new checkout, retain the original merchant configuration and reconcile existing orders.
+For a code rollback, restore the previous public and private **code** versions together while preserving database, local config and session directories. This first schema only adds its own tables; do not drop tables or delete private data as part of rollback. A rollback cannot reverse a PayPal payment. If checkout is uncertain, set `paypal_enabled=false` to disable new orders and new captures. Retain the original private merchant credentials: read-only reconciliation and existing-pass verification remain available while sales are disabled. Completed purchases can still be recovered without another charge.
 
 ## Reproduce
 
