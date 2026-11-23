@@ -1,14 +1,10 @@
-import { join } from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = join(__filename, '..');
-
+import { fileURLToPath } from 'node:url';
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+if (basePath && !/^\/[A-Za-z0-9_-]+(?:\/[A-Za-z0-9_-]+)*$/.test(basePath)) throw new Error('NEXT_PUBLIC_BASE_PATH must be a clean absolute path without a trailing slash.');
 const nextConfig = {
+  basePath,
   reactStrictMode: true,
-  experimental: {
-    optimizeCss: true
-  }
+  output: 'export',
+  outputFileTracingRoot: fileURLToPath(new URL('.', import.meta.url)),
 };
-
 export default nextConfig;
